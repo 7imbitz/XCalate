@@ -10,13 +10,13 @@ import (
 )
 
 func CheckRootProcesses() {
-	procsOutput, err := exec.Command("bash", "-c", "ps aux | awk '{print $1,$2,$9,$10,$11}'").Output()
+	procsOutput, err := exec.Command("sh", "-c", "ps aux | awk '{print $1,$2,$9,$10,$11}'").Output()
 	if err != nil {
 		gologger.Error().Msgf("Failed to get processes: %s", err)
 		return
 	}
 
-	pkgsOutput, err := exec.Command("bash", "-c", "dpkg -l | awk '{$1=$4=\"\"; print $0}'").Output()
+	pkgsOutput, err := exec.Command("sh", "-c", "dpkg -l | awk '{$1=$4=\"\"; print $0}'").Output()
 	if err != nil {
 		gologger.Error().Msgf("Failed to get packages: %s", err)
 		return
@@ -59,7 +59,7 @@ func CheckRootProcesses() {
 		if len(val) > 0 && val[0] != "" {
 			gologger.Print().Label(utils.Bsh.String()).Msg("Possible Related Packages:")
 			for _, pkg := range val {
-				gologger.Info().Msgf(" " + pkg)
+				gologger.Info().Msg(" " + pkg)
 			}
 		}
 	}

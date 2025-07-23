@@ -78,12 +78,12 @@ func hasSudo() {
 		{"Cron Jobs PATH", "Checking cronjobs environment PATH ↓", "", coreLinux.CheckCronjobsPath},
 		{"Cron Jobs File", "Checking cronjobs ↓", "", coreLinux.CheckCronJobs},
 		//{"Cron Jobs Wildcard", "Need to manually check the content of cron jobs script (if any) ↓", "cat /etc/crontab", nil},
-		//{"SUID/SGID Known Exploits", "Listing SUID/SGID Executable ↓", "", checkSuidExec},
+		{"SUID/SGID Known Exploits", "Listing SUID/SGID Executable ↓", "", coreLinux.CheckSUIDExec},
 		{"SUID/SGID Shared Object Injection", "Verify vulnerable executables ↓", "find / -type f -a \\( -perm -u+s -o -perm -g+s \\) -exec ls -l {} \\; 2> /dev/null", nil},
 		{"Passwords & Keys - History Files", "Need to manually verify password or key files ↓", "cat ~history | less", nil},
 		{"Passwords & Keys - Config Files", "Find config/password files ↓", "find /etc -name \"*.conf\" -o -name \"*.cfg\" -o -name \"*.config\"", nil},
 		{"Passwords & Keys - SSH Keys", "Find SSH private key ↓", "ls -la / OR ls -la /.ssh OR ls -la ~/.ssh", nil},
-		//{"Network File System", "Checking for NFS share configuration ↓", "", checkNFS},
+		{"Network File System", "Checking for NFS share configuration ↓", "", coreLinux.CheckNFS},
 		//{"Kernel Exploits", "Checking for possible kernel exploit ↓", "", checkKernel},
 	}
 
@@ -101,11 +101,11 @@ func noSudo() {
 		{"Cron Jobs PATH", "Checking cronjobs environment PATH ↓", "", coreLinux.CheckCronjobsPath},
 		{"Cron Jobs File", "Checking cronjobs ↓", "", coreLinux.CheckCronJobs},
 		//{"Cron Jobs Wildcard", "Need to manually check cron jobs script ↓", "cat /etc/crontab", nil},
-		//{"SUID/SGID Known Exploits", "Listing SUID/SGID Executable ↓", "", checkSuidExec},
+		{"SUID/SGID Known Exploits", "Listing SUID/SGID Executable ↓", "", coreLinux.CheckSUIDExec},
 		{"Passwords & Keys - History Files", "Verify password/key files ↓", "cat ~history | less", nil},
 		{"Passwords & Keys - Config Files", "Find config/password files ↓", "find /etc -name \"*.conf\" -o -name \"*.cfg\" -o -name \"*.config\"", nil},
 		{"Passwords & Keys - SSH Keys", "Find SSH private key ↓", "ls -la / OR ls -la /.ssh OR ls -la ~/.ssh", nil},
-		//{"Network File System", "Checking for NFS share configuration ↓", "", checkNFS},
+		{"Network File System", "Checking for NFS share configuration ↓", "", coreLinux.CheckNFS},
 		//{"Kernel Exploits", "Checking for possible kernel exploit ↓", "", checkKernel},
 	}
 
