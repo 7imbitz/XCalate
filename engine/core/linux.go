@@ -30,7 +30,7 @@ func verifySudo() {
 		return
 	}
 
-	fmt.Println()
+	fmt.Println("Starting...")
 	gologger.Info().Msg("Checking Sudo user availability ↓")
 	fmt.Printf("Do you have %s's password? (yes/no) ", currentUser.Username)
 
@@ -54,7 +54,7 @@ func verifySudo() {
 }
 
 func runTask(task Task) {
-	time.Sleep(2 * time.Second)
+	time.Sleep(3 * time.Second)
 	fmt.Println("\n=============== " + task.Title + " ===============")
 	gologger.Info().Msg(task.Message)
 
@@ -69,22 +69,13 @@ func runTask(task Task) {
 
 func hasSudo() {
 	tasks := []Task{
+		{"Sudo - Shell Escape", "Running sudo -l, you may be prompted for a password... ↓", "", coreLinux.CheckSudoCommands},
 		{"Process Exploit", "Checking for process running as root ↓", "", coreLinux.CheckRootProcesses},
-		{"Readable /etc/shadow", "Checking if Shadow file is world-readable ↓", "", coreLinux.CheckShadowReadable},
-		{"Writable /etc/shadow", "Checking if Shadow file is world-writable ↓", "", coreLinux.CheckShadowWritable},
+		{"/etc/shadow Details", "Checking Shadow file ↓", "", coreLinux.CheckShadowPermissions},
 		{"Writable /etc/passwd", "Checking if Passwd file is world-writable ↓", "", coreLinux.CheckPasswdWritable},
-		//{"Sudo - Shell Escape", "Running sudo -l ↓", "", checkSudoCommands},
-		//{"Sudo - Environment Variable", "Listing environment variable and shell escape ↓", "", checkShellEscapePath},
-		{"Cron Jobs PATH", "Checking cronjobs environment PATH ↓", "", coreLinux.CheckCronjobsPath},
-		{"Cron Jobs File", "Checking cronjobs ↓", "", coreLinux.CheckCronJobs},
-		//{"Cron Jobs Wildcard", "Need to manually check the content of cron jobs script (if any) ↓", "cat /etc/crontab", nil},
+		{"Cron Jobs Details", "Checking cronjobs ↓", "", coreLinux.CheckCronJobDetails},
 		{"SUID/SGID Known Exploits", "Listing SUID/SGID Executable ↓", "", coreLinux.CheckSUIDExec},
-		{"SUID/SGID Shared Object Injection", "Verify vulnerable executables ↓", "find / -type f -a \\( -perm -u+s -o -perm -g+s \\) -exec ls -l {} \\; 2> /dev/null", nil},
-		{"Passwords & Keys - History Files", "Need to manually verify password or key files ↓", "cat ~history | less", nil},
-		{"Passwords & Keys - Config Files", "Find config/password files ↓", "find /etc -name \"*.conf\" -o -name \"*.cfg\" -o -name \"*.config\"", nil},
-		{"Passwords & Keys - SSH Keys", "Find SSH private key ↓", "ls -la / OR ls -la /.ssh OR ls -la ~/.ssh", nil},
 		{"Network File System", "Checking for NFS share configuration ↓", "", coreLinux.CheckNFS},
-		//{"Kernel Exploits", "Checking for possible kernel exploit ↓", "", checkKernel},
 	}
 
 	for _, task := range tasks {
@@ -94,19 +85,12 @@ func hasSudo() {
 
 func noSudo() {
 	tasks := []Task{
-		{"Process Exploit", "Checking for process running as root ↓", "", coreLinux.CheckRootProcesses},
-		{"Readable /etc/shadow", "Checking if Shadow file is world-readable ↓", "", coreLinux.CheckShadowReadable},
-		{"Writable /etc/shadow", "Checking if Shadow file is world-writable ↓", "", coreLinux.CheckShadowWritable},
-		{"Writable /etc/passwd", "Checking if Passwd file is world-writable ↓", "", coreLinux.CheckPasswdWritable},
-		{"Cron Jobs PATH", "Checking cronjobs environment PATH ↓", "", coreLinux.CheckCronjobsPath},
-		{"Cron Jobs File", "Checking cronjobs ↓", "", coreLinux.CheckCronJobs},
-		//{"Cron Jobs Wildcard", "Need to manually check cron jobs script ↓", "cat /etc/crontab", nil},
+		//{"Process Exploit", "Checking for process running as root ↓", "", coreLinux.CheckRootProcesses},
+		//{"/etc/shadow Details", "Checking Shadow file ↓", "", coreLinux.CheckShadowPermissions},
+		//{"Writable /etc/passwd", "Checking if Passwd file is world-writable ↓", "", coreLinux.CheckPasswdWritable},
+		{"Cron Jobs Details", "Checking cronjobs ↓", "", coreLinux.CheckCronJobDetails},
 		{"SUID/SGID Known Exploits", "Listing SUID/SGID Executable ↓", "", coreLinux.CheckSUIDExec},
-		{"Passwords & Keys - History Files", "Verify password/key files ↓", "cat ~history | less", nil},
-		{"Passwords & Keys - Config Files", "Find config/password files ↓", "find /etc -name \"*.conf\" -o -name \"*.cfg\" -o -name \"*.config\"", nil},
-		{"Passwords & Keys - SSH Keys", "Find SSH private key ↓", "ls -la / OR ls -la /.ssh OR ls -la ~/.ssh", nil},
 		{"Network File System", "Checking for NFS share configuration ↓", "", coreLinux.CheckNFS},
-		//{"Kernel Exploits", "Checking for possible kernel exploit ↓", "", checkKernel},
 	}
 
 	for _, task := range tasks {

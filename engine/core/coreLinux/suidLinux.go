@@ -12,7 +12,9 @@ import (
 func CheckSUIDExec() {
 	cmd := exec.Command("sh", "-c", "find / -type f -perm -04000 -ls 2>/dev/null")
 	output, err := cmd.CombinedOutput()
-	if err != nil {
+
+	// Only log error if there's no output at all
+	if err != nil && len(output) == 0 {
 		gologger.Error().Msgf("Error while searching for SUID binaries: %s", err)
 		return
 	}

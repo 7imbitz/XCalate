@@ -1,6 +1,7 @@
 package coreLinux
 
 import (
+	"fmt"
 	"os/exec"
 	"strings"
 
@@ -9,65 +10,46 @@ import (
 	"github.com/projectdiscovery/gologger"
 )
 
+// CheckRootProcesses lists unique user-space processes running as root (ignores kernel threads)
 func CheckRootProcesses() {
-	procsOutput, err := exec.Command("sh", "-c", "ps aux | awk '{print $1,$2,$9,$10,$11}'").Output()
+	fmt.Println()
+	cmd := "ps aux | awk '{print $1,$2,$9,$10,$11}'"
+	procsOutput, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
 		gologger.Error().Msgf("Failed to get processes: %s", err)
 		return
 	}
 
-	pkgsOutput, err := exec.Command("sh", "-c", "dpkg -l | awk '{$1=$4=\"\"; print $0}'").Output()
-	if err != nil {
-		gologger.Error().Msgf("Failed to get packages: %s", err)
-		return
-	}
+	lines := strings.Split(string(procsOutput), "\n")
+	seen := make(map[string]bool)
+	superUsers := []string{"root"}
 
-	superUsers := []string{"root"} // add more if needed
-	procLines := strings.Split(string(procsOutput), "\n")
-	pkgLines := strings.Split(string(pkgsOutput), "\n")
-
-	procDict := make(map[string][]string)
-
-	for _, proc := range procLines {
-		for _, user := range superUsers {
-			if user != "" && strings.Contains(proc, user) {
-				fields := strings.Fields(proc)
-				if len(fields) < 5 {
-					continue
-				}
-				procName := fields[4]
-				if strings.Contains(procName, "/") {
-					parts := strings.Split(procName, "/")
-					procName = parts[len(parts)-1]
-				}
-				if len(procName) < 3 {
-					continue
-				}
-				relatedPkgs := procDict[proc]
-				for _, pkg := range pkgLines {
-					if strings.Contains(pkg, procName) && !contains(relatedPkgs, pkg) {
-						relatedPkgs = append(relatedPkgs, pkg)
-					}
-				}
-				procDict[proc] = relatedPkgs
-			}
+	for _, line := range lines {
+		fields := strings.Fields(line)
+		if len(fields) < 5 {
+			continue
 		}
-	}
 
-	for key, val := range procDict {
-		gologger.Print().Label(utils.Res.String()).Msg(key)
-		if len(val) > 0 && val[0] != "" {
-			gologger.Print().Label(utils.Bsh.String()).Msg("Possible Related Packages:")
-			for _, pkg := range val {
-				gologger.Info().Msg(" " + pkg)
-			}
+		user := fields[0]
+		command := fields[4]
+
+		// Skip kernel threads
+		if strings.HasPrefix(command, "[") && strings.HasSuffix(command, "]") {
+			continue
+		}
+
+		// Only show the first occurrence of each unique command
+		if contains(superUsers, user) && !seen[command] {
+			seen[command] = true
+			gologger.Print().Label(utils.Res.String()).Msg(line)
 		}
 	}
 }
 
-func contains(slice []string, str string) bool {
+// contains checks if a slice contains a given string
+func contains(slice []string, target string) bool {
 	for _, s := range slice {
-		if s == str {
+		if s == target {
 			return true
 		}
 	}
