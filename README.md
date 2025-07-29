@@ -44,6 +44,7 @@ In the meantime it checks for
     - ✅ kernel check for 
         - ✅ CVE-2021-3493
         - ✅ CVE-2022-0847
+        - To be added
 
 - Window
     - To be continued...
