@@ -30,9 +30,9 @@ func verifySudo() {
 		return
 	}
 
-	fmt.Println("Starting...")
+	gologger.Info().Msg("Starting...")
 	gologger.Info().Msg("Checking Sudo user availability ↓")
-	fmt.Printf("Do you have %s's password? (yes/no) ", currentUser.Username)
+	gologger.Print().Label(utils.Bsh.String()).Msgf("Do you have %s's password? (yes/no) ", currentUser.Username)
 
 	// Read user input
 	_, err = fmt.Scanln(&hasPassword)
@@ -76,6 +76,8 @@ func hasSudo() {
 		{"Cron Jobs Details", "Checking cronjobs ↓", "", coreLinux.CheckCronJobDetails},
 		{"SUID/SGID Known Exploits", "Listing SUID/SGID Executable ↓", "", coreLinux.CheckSUIDExec},
 		{"Network File System", "Checking for NFS share configuration ↓", "", coreLinux.CheckNFS},
+		{"Passwords & Keys", "Checking for password and key files ↓", "", coreLinux.CheckFilesAndDirs},
+		{"Kernel Exploit", "Checking for kernel exploit ↓", "", coreLinux.CheckKernel},
 	}
 
 	for _, task := range tasks {
@@ -85,12 +87,14 @@ func hasSudo() {
 
 func noSudo() {
 	tasks := []Task{
-		//{"Process Exploit", "Checking for process running as root ↓", "", coreLinux.CheckRootProcesses},
-		//{"/etc/shadow Details", "Checking Shadow file ↓", "", coreLinux.CheckShadowPermissions},
-		//{"Writable /etc/passwd", "Checking if Passwd file is world-writable ↓", "", coreLinux.CheckPasswdWritable},
+		{"Process Exploit", "Checking for process running as root ↓", "", coreLinux.CheckRootProcesses},
+		{"/etc/shadow Details", "Checking Shadow file ↓", "", coreLinux.CheckShadowPermissions},
+		{"Writable /etc/passwd", "Checking if Passwd file is world-writable ↓", "", coreLinux.CheckPasswdWritable},
 		{"Cron Jobs Details", "Checking cronjobs ↓", "", coreLinux.CheckCronJobDetails},
 		{"SUID/SGID Known Exploits", "Listing SUID/SGID Executable ↓", "", coreLinux.CheckSUIDExec},
 		{"Network File System", "Checking for NFS share configuration ↓", "", coreLinux.CheckNFS},
+		{"Passwords & Keys", "Checking for password and key files ↓", "", coreLinux.CheckFilesAndDirs},
+		{"Kernel Exploit", "Checking for kernel exploit ↓", "", coreLinux.CheckKernel},
 	}
 
 	for _, task := range tasks {
