@@ -3,6 +3,9 @@ A privilege escalation tools based on TryHackMe.
 
 Run simple check (not thorough) for possible vector of privilege escalation.
 
+# Installation
+
+
 # reference
 - https://tryhackme.com/r/room/linuxprivesc
 - https://tryhackme.com/r/room/windows10privesc

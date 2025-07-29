@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define URL and filename
-URL="http://10.6.67.160/XCalate"
+URL="http://IP_Address/XCalate"
 FILENAME="XCalate"
 
 # Download the file
