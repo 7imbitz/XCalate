@@ -23,6 +23,7 @@ chmod +x XCalate
 # Reference
 
 - https://tryhackme.com/r/room/linuxprivesc
+    - https://tryhackme.com/7imbitz/badges/linux-privesc     
 - https://tryhackme.com/r/room/windows10privesc
 
 # Checklist
