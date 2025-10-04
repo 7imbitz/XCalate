@@ -28,10 +28,17 @@ func CheckSudoCommands() {
 
 	err = cmd.Run()
 	if err != nil {
-		gologger.Fatal().Msgf("Failed to run sudo -l: %v", err)
+		gologger.Error().Msgf(`Failed to run "sudo -l": %v`, err)
+		gologger.Print().Label(utils.Sad.String()).Msg(`Skipping sudo privilege checks — continuing with other modules ↓`)
+		return
 	}
 
 	output := out.String()
+	if strings.TrimSpace(output) == "" {
+		gologger.Print().Label(utils.Sad.String()).Msg(`"sudo -l" returned empty output — skipping further analysis ↓`)
+		return
+	}
+
 	gologger.Info().Msg("Parsing sudo -l output...")
 
 	parseSudoL(output, currentUser.Username)

@@ -8,7 +8,7 @@ Run simple check (not thorough) for possible vector of privilege escalation.
 >Tested with go version go1.24.0
 1. `git clone https://github.com/7imbitz/XCalate.git`
 2. `cd XCalate`
-3. `GOOS=linux GOARCH=amd64 go build -o XCalate cmd/main.go`
+3. `env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o XCalate cmd/main.go`
 4. Transfer the binary to the victim machine
 
 ```bash

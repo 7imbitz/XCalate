@@ -7,7 +7,7 @@ import (
 )
 
 // Purely for banner
-const Version = `1.0.0`
+const Version = `1.0.1`
 
 const Author = `7imbitz`
 

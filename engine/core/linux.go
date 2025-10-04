@@ -32,7 +32,7 @@ func verifySudo() {
 
 	gologger.Info().Msg("Starting...")
 	gologger.Info().Msg("Checking Sudo user availability ↓")
-	gologger.Print().Label(utils.Bsh.String()).Msgf("Do you have %s's password? (yes/no) ", currentUser.Username)
+	gologger.Print().Label(utils.Bsh.String()).Msgf("Do you have %s's password? ((y)es/(n)o) ", currentUser.Username)
 
 	// Read user input
 	_, err = fmt.Scanln(&hasPassword)
@@ -42,10 +42,10 @@ func verifySudo() {
 
 	// Check user input
 	switch hasPassword {
-	case "yes":
+	case "yes", "y", "Y":
 		gologger.Print().Label(utils.Res.String()).Msg("Running all functions ↓")
 		hasSudo()
-	case "no":
+	case "no", "n", "N":
 		gologger.Print().Label(utils.Sad.String()).Msg("Skipping several functions ↓")
 		noSudo()
 	default:
@@ -72,7 +72,7 @@ func hasSudo() {
 		{"Sudo - Shell Escape", "Running sudo -l, you may be prompted for a password... ↓", "", coreLinux.CheckSudoCommands},
 		{"Process Exploit", "Checking for process running as root ↓", "", coreLinux.CheckRootProcesses},
 		{"/etc/shadow Details", "Checking Shadow file ↓", "", coreLinux.CheckShadowPermissions},
-		{"Writable /etc/passwd", "Checking if Passwd file is world-writable ↓", "", coreLinux.CheckPasswdWritable},
+		{"Writable /etc/passwd", "Checkin Passwd file ↓", "", coreLinux.CheckPasswdWritable},
 		{"Cron Jobs Details", "Checking cronjobs ↓", "", coreLinux.CheckCronJobDetails},
 		{"SUID/SGID Known Exploits", "Listing SUID/SGID Executable ↓", "", coreLinux.CheckSUIDExec},
 		{"Network File System", "Checking for NFS share configuration ↓", "", coreLinux.CheckNFS},
@@ -89,7 +89,7 @@ func noSudo() {
 	tasks := []Task{
 		{"Process Exploit", "Checking for process running as root ↓", "", coreLinux.CheckRootProcesses},
 		{"/etc/shadow Details", "Checking Shadow file ↓", "", coreLinux.CheckShadowPermissions},
-		{"Writable /etc/passwd", "Checking if Passwd file is world-writable ↓", "", coreLinux.CheckPasswdWritable},
+		{"Writable /etc/passwd", "Checking Passwd file ↓", "", coreLinux.CheckPasswdWritable},
 		{"Cron Jobs Details", "Checking cronjobs ↓", "", coreLinux.CheckCronJobDetails},
 		{"SUID/SGID Known Exploits", "Listing SUID/SGID Executable ↓", "", coreLinux.CheckSUIDExec},
 		{"Network File System", "Checking for NFS share configuration ↓", "", coreLinux.CheckNFS},
