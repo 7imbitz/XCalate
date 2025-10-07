@@ -27,7 +27,6 @@ func checkCve220847() {
 
 	kernelVersion := strings.TrimSpace(string(output))
 	gologger.Info().Msgf("Kernel Version: %s", kernelVersion)
-	fmt.Println()
 
 	vulnerableRangeStart := "5.8.0"
 	vulnerableRangeEnd := "5.16.11"
@@ -39,6 +38,7 @@ func checkCve220847() {
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("Kernel version was either not vulnerable or patched for CVE-2022-0847.")
 	}
+	fmt.Println()
 }
 
 func checkCve213493() {

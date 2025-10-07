@@ -47,6 +47,8 @@ func CheckSudoCommands() {
 func parseSudoL(output, username string) {
 	scanner := bufio.NewScanner(strings.NewReader(output))
 
+	var allPattern = "(ALL:ALL)ALL"
+
 	startParsing := false
 	commandRegex := regexp.MustCompile(`\(([^)]+)\)\s+NOPASSWD:\s*(.+)`)
 
@@ -62,6 +64,16 @@ func parseSudoL(output, username string) {
 			line = strings.TrimSpace(line)
 			if line == "" {
 				break // End of list
+			}
+
+			// Normalize spaces for easy ALL-detection:
+			normalized := strings.ReplaceAll(line, " ", "")
+
+			// Detect "(ALL : ALL) ALL" and variants like "(ALL) ALL", possibly with NOPASSWD hints
+			if strings.Contains(normalized, allPattern) || strings.Contains(normalized, "(ALL)ALL") {
+				gologger.Print().Label(utils.Res.String()).Msgf("User %s able to run ALL", username)
+				// optionally break out of parsing as no further per-binary checks are needed
+				break
 			}
 
 			// Match commands
