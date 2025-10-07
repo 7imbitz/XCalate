@@ -14,6 +14,7 @@ func CheckKernel() {
 	checkCve220847()
 	// CVE-2021-3493
 	checkCve213493()
+	fmt.Println()
 }
 
 func checkCve220847() {

@@ -19,6 +19,8 @@ type Task struct {
 
 func LinPrivEscChecker() {
 	verifySudo()
+	gologger.Print().Label(utils.Res.String()).Msgf("Happy hacking!")
+	fmt.Println()
 }
 
 func verifySudo() {
