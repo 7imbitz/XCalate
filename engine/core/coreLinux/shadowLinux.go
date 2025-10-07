@@ -12,14 +12,6 @@ func CheckShadowPermissions() {
 	gologger.Info().Msg("Checking if Shadow file is world-readable ↓")
 	readable, errReadable := utils.IsWorldReadable(utils.ShadowPath)
 
-	gologger.Info().Msg("Checking if Shadow file is world-writable ↓")
-	writable, errWritable := utils.IsWorldWritable(utils.ShadowPath)
-
-	// Show the verification command once
-	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `ls -lat /etc/shadow`")
-	fmt.Println()
-
-	// Output results
 	if errReadable != nil {
 		gologger.Error().Msgf("Error checking world readability: %s", errReadable)
 	} else if readable {
@@ -27,6 +19,10 @@ func CheckShadowPermissions() {
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("Shadow file is not world-readable")
 	}
+	fmt.Println()
+
+	gologger.Info().Msg("Checking if Shadow file is world-writable ↓")
+	writable, errWritable := utils.IsWorldWritable(utils.ShadowPath)
 
 	if errWritable != nil {
 		gologger.Error().Msgf("Error checking world writability: %s", errWritable)
@@ -35,4 +31,10 @@ func CheckShadowPermissions() {
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("Shadow file is not world-writable")
 	}
+	fmt.Println()
+
+	// Show the verification command once
+	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `ls -lat /etc/shadow`")
+	fmt.Println()
+
 }

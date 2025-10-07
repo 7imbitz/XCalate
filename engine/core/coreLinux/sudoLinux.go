@@ -69,7 +69,8 @@ func parseSudoL(output, username string) {
 			if len(matches) == 3 {
 				binaries := strings.Split(matches[2], ",")
 				for _, bin := range binaries {
-					gologger.Print().Label(utils.Bsh.String()).Msgf("%s\n", strings.TrimSpace(bin))
+					//gologger.Print().Label(utils.Bsh.String()).Msgf("%s\n", strings.TrimSpace(bin))
+					gologger.Print().Label(utils.Res.String()).Msgf("User %s may run the %s binary using sudo", username, strings.TrimSpace(bin))
 				}
 			}
 		}

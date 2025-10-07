@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
+	"path/filepath"
 	"strings"
 
 	"github.com/projectdiscovery/gologger"
@@ -13,9 +14,6 @@ import (
 
 func CheckCronJobDetails() {
 	gologger.Info().Msg("Checking cronjobs environment PATH ↓")
-	gologger.Info().Msg("Checking cronjobs being run with a wildcard (*) ↓")
-	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `cat /etc/crontab`")
-	fmt.Println()
 
 	currentUser, err := user.Current()
 	if err != nil {
@@ -42,7 +40,8 @@ func CheckCronJobDetails() {
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("PATH in /etc/crontab does not have home user directory")
 	}
-
+	fmt.Println()
+	gologger.Info().Msg("Checking cronjobs being run with a wildcard (*) ↓")
 	gologger.Print().Label(utils.Res.String()).Msg("Content of /etc/crontab")
 	lines := strings.Split(crontabString, "\n")
 	for _, line := range lines {
@@ -72,11 +71,28 @@ func CheckCronJobDetails() {
 		// If full path
 		var allScriptPaths []string
 
-		if strings.HasPrefix(scriptField, "/") {
+		if strings.Contains(scriptField, "cd ") && strings.Contains(scriptField, "&&") {
+			parts := strings.Split(scriptField, "&&")
+			if len(parts) == 2 {
+				dirPart := strings.TrimSpace(strings.TrimPrefix(parts[0], "cd"))
+				dirPart = strings.TrimSpace(dirPart)
+				cmdPart := strings.TrimSpace(parts[1])
+
+				if strings.Contains(cmdPart, "bash") || strings.Contains(cmdPart, "sh") {
+					cmdFields := strings.Fields(cmdPart)
+					if len(cmdFields) > 1 {
+						scriptName := strings.TrimSpace(cmdFields[len(cmdFields)-1])
+						fullPath := filepath.Join(dirPart, scriptName)
+						allScriptPaths = append(allScriptPaths, fullPath)
+					}
+				}
+			}
+		} else if strings.HasPrefix(scriptField, "/") {
 			// Direct path provided
 			allScriptPaths = append(allScriptPaths, scriptField)
 		} else {
 			// Try to locate the script via `find`
+			fmt.Println(scriptField)
 			findCmd := exec.Command("sh", "-c", fmt.Sprintf("find / -name '%s' 2>/dev/null", scriptField))
 			foundPath, err := findCmd.Output()
 
@@ -125,5 +141,6 @@ func CheckCronJobDetails() {
 			fmt.Println()
 		}
 	}
-
+	fmt.Println()
+	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `cat /etc/crontab`")
 }

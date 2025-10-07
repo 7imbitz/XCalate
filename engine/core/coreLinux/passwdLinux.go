@@ -11,9 +11,6 @@ import (
 func CheckPasswdWritable() {
 	gologger.Info().Msg("Checking if Passwd file is world-writable ↓")
 
-	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `ls -lat /etc/passwd`")
-	fmt.Println()
-
 	passwdWritable, errPasswdWritable := utils.IsWorldWritable(utils.PasswdPath)
 	if errPasswdWritable != nil {
 		gologger.Error().Msgf("Error checking world writability: %s", errPasswdWritable)
@@ -24,4 +21,6 @@ func CheckPasswdWritable() {
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("Passwd file is not world-writable")
 	}
+	fmt.Println()
+	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `ls -lat /etc/passwd`")
 }
