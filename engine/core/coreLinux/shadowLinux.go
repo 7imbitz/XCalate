@@ -35,6 +35,5 @@ func CheckShadowPermissions() {
 
 	// Show the verification command once
 	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `ls -lat /etc/shadow`")
-	fmt.Println()
 
 }

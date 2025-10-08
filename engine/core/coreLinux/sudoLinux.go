@@ -40,7 +40,6 @@ func CheckSudoCommands() {
 	}
 
 	gologger.Info().Msg("Parsing sudo -l output...")
-
 	parseSudoL(output, currentUser.Username)
 }
 
@@ -50,7 +49,12 @@ func parseSudoL(output, username string) {
 	var allPattern = "(ALL:ALL)ALL"
 
 	startParsing := false
-	commandRegex := regexp.MustCompile(`\(([^)]+)\)\s+NOPASSWD:\s*(.+)`)
+
+	// match explicit NOPASSWD: entries like "(user : group) NOPASSWD: /usr/bin/XXX, /usr/bin/YYY"
+	nopassRegex := regexp.MustCompile(`^\(([^)]+)\)\s+NOPASSWD:\s*(.+)`)
+
+	// generic matcher for lines that start with "(...)" followed by a command (captures the entire RHS)
+	cmdRegex := regexp.MustCompile(`^\(([^)]+)\)\s*(.+)`)
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -70,21 +74,38 @@ func parseSudoL(output, username string) {
 			normalized := strings.ReplaceAll(line, " ", "")
 
 			// Detect "(ALL : ALL) ALL" and variants like "(ALL) ALL", possibly with NOPASSWD hints
-			if strings.Contains(normalized, allPattern) || strings.Contains(normalized, "(ALL)ALL") {
+			if strings.Contains(normalized, allPattern) || strings.Contains(normalized, "(ALL)ALL") || strings.Contains(normalized, "NOPASSWD:ALL") {
 				gologger.Print().Label(utils.Res.String()).Msgf("User %s able to run ALL", username)
-				// optionally break out of parsing as no further per-binary checks are needed
 				break
 			}
 
-			// Match commands
-			matches := commandRegex.FindStringSubmatch(line)
-			if len(matches) == 3 {
+			// First try NOPASSWD style parsing (and split comma-separated commands)
+			if matches := nopassRegex.FindStringSubmatch(line); len(matches) == 3 {
+				// matches[1] = who, matches[2] = comma separated command list
 				binaries := strings.Split(matches[2], ",")
 				for _, bin := range binaries {
-					//gologger.Print().Label(utils.Bsh.String()).Msgf("%s\n", strings.TrimSpace(bin))
 					gologger.Print().Label(utils.Res.String()).Msgf("User %s may run the %s binary using sudo", username, strings.TrimSpace(bin))
 				}
+				continue
 			}
+
+			// Generic command line: capture whatever is after the "(who)" and print it as a whole
+			if matches := cmdRegex.FindStringSubmatch(line); len(matches) == 3 {
+				commandStr := strings.TrimSpace(matches[2])
+				// If the RHS is a comma-separated list, still print each; otherwise print whole command
+				if strings.Contains(commandStr, ",") {
+					parts := strings.Split(commandStr, ",")
+					for _, p := range parts {
+						gologger.Print().Label(utils.Res.String()).Msgf("User %s may run: %s", username, strings.TrimSpace(p))
+					}
+				} else {
+					gologger.Print().Label(utils.Res.String()).Msgf("User %s may run: %s", username, commandStr)
+				}
+				continue
+			}
+
+			// If it reaches here, we couldn't parse the line — print it raw for visibility
+			gologger.Print().Label(utils.Sad.String()).Msgf("Unparsed sudo line: %s", line)
 		}
 	}
 
