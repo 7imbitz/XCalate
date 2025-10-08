@@ -47,6 +47,7 @@ In the meantime it checks for
         - ✅ /etc/passwd - Writable
     - ✅ Sudo - Shell Escape Sequences
     - ✅ SUID Executable
+    - ✅ [Capability](https://www.hackingarticles.in/linux-privilege-escalation-using-capabilities/)
     - ✅ Cron Jobs
         - ✅ Overwrite custom cronjob - Writable
         - ✅ Check user's path inside the file
