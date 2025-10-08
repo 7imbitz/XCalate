@@ -1,7 +1,9 @@
 # 🚀 XCalate
-A privilege escalation tools based on TryHackMe.
+A lightweight privilege escalation reconnaissance tool inspired by TryHackMe labs.  
+XCalate performs a series of quick checks (not exhaustive) to surface potential privilege-escalation vectors on Linux targets.
 
-Run simple check (not thorough) for possible vector of privilege escalation.
+> **Note:** This tool is intended for authorized security assessments and educational labs only. ⚠️ Do **not** run against systems you do not own or have explicit permission to test.
+
 
 # ⚙️ Installation
 
