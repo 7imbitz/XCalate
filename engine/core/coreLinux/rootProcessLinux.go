@@ -5,8 +5,6 @@ import (
 	"os/exec"
 	"strings"
 
-	"XCalate/engine/utils"
-
 	"github.com/projectdiscovery/gologger"
 )
 
@@ -41,7 +39,7 @@ func CheckRootProcesses() {
 		// Only show the first occurrence of each unique command
 		if contains(superUsers, user) && !seen[command] {
 			seen[command] = true
-			gologger.Print().Label(utils.Res.String()).Msg(line)
+			gologger.Info().Msg(line)
 		}
 	}
 }

@@ -32,3 +32,43 @@ func CheckSUIDExec() {
 		}
 	}
 }
+
+func CheckCapability() {
+	cmd := exec.Command("sh", "-c", "getcap -r / 2>/dev/null")
+	output, err := cmd.CombinedOutput()
+
+	// If command errored and produced no output, log and return
+	if err != nil && len(output) == 0 {
+		gologger.Error().Msgf("Error while searching for capabilities: %v", err)
+		return
+	}
+
+	// If no output at all, likely getcap not present or nothing found anywhere
+	if len(output) == 0 || strings.TrimSpace(string(output)) == "" {
+		gologger.Print().Label(utils.Sad.String()).Msg("No capabilities binary")
+		return
+	}
+
+	// Collect lines that contain cap_setuid+ep
+	var found []string
+	lines := strings.Split(string(output), "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+		if strings.Contains(line, "cap_setuid+ep") {
+			found = append(found, line)
+		}
+	}
+
+	// Print results based on whether any cap_setuid+ep entries were found
+	if len(found) > 0 {
+		gologger.Print().Label(utils.Res.String()).Msg("`cap_setuid+ep` binaries found:")
+		for _, l := range found {
+			gologger.Info().Msg(l)
+		}
+	} else {
+		gologger.Print().Label(utils.Sad.String()).Msg("No `cap_setuid+ep` binaries found")
+	}
+}
