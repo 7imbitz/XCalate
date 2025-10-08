@@ -34,11 +34,11 @@ func checkCve220847() {
 
 	if isVulnerable(kernelVersion, vulnerableRangeStart, vulnerableRangeEnd, patchVersions) {
 		gologger.Print().Label(utils.Res.String()).Msg("Kernel version MIGHT be vulnerable to CVE-2022-0847")
-		gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `uname -a | awk '{print $3}'`")
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("Kernel version was either not vulnerable or patched for CVE-2022-0847.")
 	}
 	fmt.Println()
+	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `uname -a | awk '{print $3}'`")
 }
 
 func checkCve213493() {

@@ -58,10 +58,13 @@ In the meantime it checks for
     - ✅ .ssh
     - ✅ Kernel check for 
         - ✅ CVE-2021-3493
-        - 👷🏻‍♂️ [CVE-2022-0847](https://www.hackingarticles.in/linux-privilege-escalation-dirtypipe-cve-2022-0847/)
+        - ✅ [CVE-2022-0847](https://www.hackingarticles.in/linux-privilege-escalation-dirtypipe-cve-2022-0847/)
         - 👷🏻‍♂️ [CVE-2021-4034](https://www.hackingarticles.in/linux-privilege-escalation-pwnkit-cve-2021-4034/)
+            - `ls -l /usr/bin/pkexec`
+            - `stat -c "%A %U %G %n" /usr/bin/pkexec`
+            - cross-check OS
         - 👷🏻‍♂️ [CVE-2021-3560](https://www.hackingarticles.in/linux-privilege-escalation-polkit-cve-2021-3560/)
-        - To be added
+            - Any system running polkit version < 0.119 is vulnerable to privilege escalation through this method
 
 - Window
     - To be continued...
