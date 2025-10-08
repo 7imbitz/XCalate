@@ -10,6 +10,7 @@ Run simple check (not thorough) for possible vector of privilege escalation.
 2. `cd XCalate`
 _Build_
 3. Send `uname -m` command inside target
+
 <div align="center">
 |`uname -m`| Meaning | `GOARCH`| Command |
 |---|---|---|---|
@@ -18,6 +19,7 @@ _Build_
 |aarch64|64-bit ARM|`arm64`| `env CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o XCalate cmd/main.go`|
 |armv7l, armv6l|32-bit ARM|`arm`| `env CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o XCalate cmd/main.go`|
 </div>
+
 4. Transfer the binary to the victim machine
 
 ```bash
