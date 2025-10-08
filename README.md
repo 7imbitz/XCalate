@@ -8,17 +8,21 @@ Run simple check (not thorough) for possible vector of privilege escalation.
 >Tested with go version go1.24.0
 1. `git clone https://github.com/7imbitz/XCalate.git`
 2. `cd XCalate`
+
 _Build_
+
 3. Send `uname -m` command inside target
 
-<div align="center">
+<center>
+
 |`uname -m`| Meaning | `GOARCH`| Command |
 |---|---|---|---|
 |x86_64, amd64|64-bit Intel/AMD| `amd64`| `env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o XCalate cmd/main.go`|
 |i686, i386|32-bit x86|`386`| `env CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -o XCalate cmd/main.go`|
 |aarch64|64-bit ARM|`arm64`| `env CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o XCalate cmd/main.go`|
 |armv7l, armv6l|32-bit ARM|`arm`| `env CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o XCalate cmd/main.go`|
-</div>
+
+</center>
 
 4. Transfer the binary to the victim machine
 
