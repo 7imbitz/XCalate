@@ -63,7 +63,7 @@ In the meantime it checks for
             - `ls -l /usr/bin/pkexec`
             - `stat -c "%A %U %G %n" /usr/bin/pkexec`
             - cross-check OS
-        - 👷🏻‍♂️ [CVE-2021-3560](https://www.hackingarticles.in/linux-privilege-escalation-polkit-cve-2021-3560/)
+        - ✅ [CVE-2021-3560](https://www.hackingarticles.in/linux-privilege-escalation-polkit-cve-2021-3560/)
             - Any system running polkit version < 0.119 is vulnerable to privilege escalation through this method
 
 - Window

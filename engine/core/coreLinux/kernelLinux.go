@@ -2,8 +2,11 @@ package coreLinux
 
 import (
 	"XCalate/engine/utils"
+	"bytes"
 	"fmt"
 	"os/exec"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/projectdiscovery/gologger"
@@ -14,7 +17,52 @@ func CheckKernel() {
 	checkCve220847()
 	// CVE-2021-3493
 	checkCve213493()
+	// CVE-2021-3560
+	checkPolkitVulnerable()
 	fmt.Println()
+}
+
+func checkPolkitVulnerable() {
+	cmd := exec.Command("pkexec", "--version")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+
+	if err != nil {
+		gologger.Error().Msgf("`pkexec` not found or failed to execute: %v", err)
+		gologger.Print().Label(utils.Sad.String()).Msg("Polkit not installed — skipping check.")
+		return
+	}
+
+	versionOutput := strings.TrimSpace(out.String())
+	re := regexp.MustCompile(`\d+\.\d+`)
+	match := re.FindString(versionOutput)
+
+	if match == "" {
+		gologger.Error().Msgf("Failed to parse Polkit version from: %s", versionOutput)
+		return
+	}
+
+	// Parse the version string, e.g., "0.117"
+	versionParts := strings.Split(match, ".")
+	if len(versionParts) < 2 {
+		gologger.Error().Msgf("Unexpected version format: %s", match)
+		return
+	}
+
+	major, _ := strconv.Atoi(versionParts[0])
+	minor, _ := strconv.Atoi(versionParts[1])
+
+	// Vulnerable if < 0.119
+	if major == 0 && minor < 119 {
+		gologger.Print().Label(utils.Res.String()).Msgf("Vulnerable Polkit version detected: %s (< 0.119)", match)
+		gologger.Print().Label(utils.Res.String()).Msg("MIGHT be vulnerable to CVE-2022-0847")
+	} else {
+		gologger.Print().Label(utils.Sad.String()).Msgf("Safe Polkit version detected: %s (>= 0.119)", match)
+		gologger.Print().Label(utils.Sad.String()).Msg("Either not vulnerable or patched for CVE-2022-0847")
+	}
+	fmt.Println()
+	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `pkexec --version`")
 }
 
 func checkCve220847() {
