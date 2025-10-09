@@ -56,13 +56,13 @@ func checkPolkitVulnerable() {
 	// Vulnerable if < 0.119
 	if major == 0 && minor < 119 {
 		gologger.Print().Label(utils.Res.String()).Msgf("Vulnerable Polkit version detected: %s (< 0.119)", match)
-		gologger.Print().Label(utils.Res.String()).Msg("MIGHT be vulnerable to CVE-2022-0847")
+		gologger.Print().Label(utils.Res.String()).Msg("MIGHT be vulnerable to CVE-2021-3560")
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msgf("Safe Polkit version detected: %s (>= 0.119)", match)
-		gologger.Print().Label(utils.Sad.String()).Msg("Either not vulnerable or patched for CVE-2022-0847")
+		gologger.Print().Label(utils.Sad.String()).Msg("Either not vulnerable or patched for CVE-2021-3560")
 	}
-	fmt.Println()
 	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `pkexec --version`")
+	fmt.Println()
 }
 
 func checkCve220847() {
@@ -85,8 +85,8 @@ func checkCve220847() {
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("Kernel version was either not vulnerable or patched for CVE-2022-0847.")
 	}
-	fmt.Println()
 	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `uname -a | awk '{print $3}'`")
+	fmt.Println()
 }
 
 func checkCve213493() {
@@ -117,6 +117,9 @@ func checkCve213493() {
 		}
 	}
 	gologger.Print().Label(utils.Sad.String()).Msg("Kernel version was either not vulnerable or patched for CVE-2021-3493.")
+
+	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `cat /etc/issue`")
+	fmt.Println()
 
 }
 
