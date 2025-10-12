@@ -4,7 +4,9 @@ import (
 	"XCalate/engine/core/coreLinux"
 	"XCalate/engine/utils"
 	"fmt"
+	"os/exec"
 	"os/user"
+	"strings"
 	"time"
 
 	"github.com/projectdiscovery/gologger"
@@ -23,6 +25,32 @@ func LinPrivEscChecker() {
 	fmt.Println()
 }
 
+func profiler() {
+	cmds := []struct {
+		label string
+		name  string
+		args  []string
+	}{
+		{"User", "whoami", nil},
+		{"Print Working Dir", "pwd", nil},
+		{"User IDs", "id", nil},
+		{"Hostname", "hostname", nil},
+	}
+
+	for _, c := range cmds {
+		out, err := exec.Command(c.name, c.args...).CombinedOutput()
+		output := strings.TrimSpace(string(out))
+		if err != nil {
+			gologger.Error().Msgf("%-12s: ERROR: %v\n", c.label, err)
+			if output != "" {
+				gologger.Info().Msgf("  output: %s\n", output)
+			}
+			continue
+		}
+		gologger.Print().Label(utils.Bsh.String()).Msgf("%-12s: %s\n", c.label, output)
+	}
+}
+
 func verifySudo() {
 	var hasPassword string
 	// Get the current user
@@ -33,6 +61,7 @@ func verifySudo() {
 	}
 
 	gologger.Info().Msg("Starting...")
+	profiler()
 	gologger.Info().Msg("Checking Sudo user availability ↓")
 	gologger.Print().Label(utils.Bsh.String()).Msgf("Do you have %s's password? ((y)es/(n)o) ", currentUser.Username)
 
@@ -51,7 +80,7 @@ func verifySudo() {
 		gologger.Print().Label(utils.Sad.String()).Msg("Skipping several functions ↓")
 		noSudo()
 	default:
-		gologger.Fatal().Msg("Invalid input. Please enter 'yes' or 'no'.")
+		gologger.Fatal().Msg("Invalid input. Please enter '(y)es' or '(n)o'.")
 	}
 }
 
