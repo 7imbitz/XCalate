@@ -2,6 +2,7 @@ package core
 
 import (
 	"XCalate/engine/core/coreLinux"
+	"XCalate/engine/report"
 	"XCalate/engine/utils"
 	"fmt"
 	"os/exec"
@@ -21,6 +22,7 @@ type Task struct {
 
 func LinPrivEscChecker() {
 	verifySudo()
+	report.PrintSummary()
 	gologger.Print().Label(utils.Res.String()).Msgf("Happy hacking!")
 	fmt.Println()
 }

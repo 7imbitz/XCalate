@@ -1,6 +1,7 @@
 package coreLinux
 
 import (
+	"XCalate/engine/report"
 	"XCalate/engine/utils"
 	"bufio"
 	"bytes"
@@ -30,17 +31,21 @@ func CheckSudoCommands() {
 	if err != nil {
 		gologger.Error().Msgf(`Failed to run "sudo -l": %v`, err)
 		gologger.Print().Label(utils.Sad.String()).Msg(`Skipping sudo privilege checks — continuing with other modules ↓`)
+		report.MarkTask("Task 6 - Sudo - Shell Escape Sequences", false)
 		return
 	}
 
 	output := out.String()
 	if strings.TrimSpace(output) == "" {
 		gologger.Print().Label(utils.Sad.String()).Msg(`"sudo -l" returned empty output — skipping further analysis ↓`)
+		report.MarkTask("Task 6 - Sudo - Shell Escape Sequences", false)
 		return
 	}
 
 	gologger.Info().Msg("Parsing sudo -l output...")
+	report.MarkTask("Task 6 - Sudo - Shell Escape Sequences", true)
 	parseSudoL(output, currentUser.Username)
+	report.MarkTaskStatus("Task 7 - Sudo - Environment Variables", report.Manual)
 }
 
 func parseSudoL(output, username string) {

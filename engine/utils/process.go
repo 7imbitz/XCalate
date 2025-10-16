@@ -4,40 +4,6 @@ import (
 	"os"
 )
 
-// World-Readable func
-/*func IsWorldReadable(filePath string) (bool, error) {
-	// Get file information
-	fileInfo, err := os.Stat(filePath)
-	if err != nil {
-		return false, err
-	}
-
-	// Extract permission bits
-	permissions := fileInfo.Mode().Perm()
-
-	// Check if others (world) have read permission
-	worldReadable := permissions&(1<<2) != 0
-
-	return worldReadable, nil
-}
-
-// World-Writable func
-func IsWorldWritable(filePath string) (bool, error) {
-	// Get file information
-	fileInfo, err := os.Stat(filePath)
-	if err != nil {
-		return false, err
-	}
-
-	// Extract permission bits
-	permissions := fileInfo.Mode().Perm()
-
-	// Check if others (world) have write permission
-	worldWritable := permissions&(1<<1) != 0
-
-	return worldWritable, nil
-}*/
-
 // checkWorldPermission checks if the world (others) have the specified permission bit.
 func checkWorldPermission(filePath string, permBit os.FileMode) (bool, error) {
 	info, err := os.Stat(filePath)

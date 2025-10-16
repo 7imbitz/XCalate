@@ -1,6 +1,7 @@
 package coreLinux
 
 import (
+	"XCalate/engine/report"
 	"XCalate/engine/utils"
 	"os/exec"
 	"strings"
@@ -10,6 +11,10 @@ import (
 
 // CheckSUIDExec scans for SUID binaries on the system
 func CheckSUIDExec() {
+	report.MarkTaskStatus("Task 12 - SUID / SGID Executables - Shared Object Injection", report.Manual)
+	report.MarkTaskStatus("Task 13 - SUID / SGID Executables - Environment Variables", report.Manual)
+	report.MarkTaskStatus("Task 14 - SUID / SGID Executables - Abusing Shell Features (#1)", report.Manual)
+	report.MarkTaskStatus("Task 15 - SUID / SGID Executables - Abusing Shell Features (#2)", report.Manual)
 	cmd := exec.Command("sh", "-c", "find / -type f -perm -04000 -ls 2>/dev/null")
 	output, err := cmd.CombinedOutput()
 
@@ -20,11 +25,13 @@ func CheckSUIDExec() {
 	}
 
 	if len(output) == 0 {
+		report.MarkTask("Task 11 - SUID / SGID Executables - Known Exploits", false)
 		gologger.Print().Label(utils.Sad.String()).Msg("No SUID binaries found")
 		return
 	}
 
 	gologger.Print().Label(utils.Res.String()).Msg("SUID binaries found:")
+	report.MarkTask("Task 11 - SUID / SGID Executables - Known Exploits", true)
 	lines := strings.Split(string(output), "\n")
 	for _, line := range lines {
 		if strings.TrimSpace(line) != "" {

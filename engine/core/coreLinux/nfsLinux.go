@@ -1,6 +1,7 @@
 package coreLinux
 
 import (
+	"XCalate/engine/report"
 	"XCalate/engine/utils"
 	"os"
 
@@ -11,6 +12,7 @@ import (
 func CheckNFS() {
 	// Check if /etc/exports file exists
 	if _, err := os.Stat("/etc/exports"); os.IsNotExist(err) {
+		report.MarkTask("Task 19 - NFS", false)
 		gologger.Print().Label(utils.Sad.String()).Msg("/etc/exports file not found")
 		return
 	} else if err != nil {
@@ -21,5 +23,6 @@ func CheckNFS() {
 
 	// File exists
 	gologger.Print().Label(utils.Res.String()).Msg("Found NFS export configuration! `/etc/exports`")
+	report.MarkTask("Task 19 - NFS", true)
 	gologger.Info().Msg("Files created via NFS inherit the remote user's ID. If the user is root, and root squashing is enabled, the ID will instead be set to the \"nobody\" user.")
 }

@@ -1,6 +1,7 @@
 package coreLinux
 
 import (
+	"XCalate/engine/report"
 	"XCalate/engine/utils"
 	"os"
 	"os/user"
@@ -23,10 +24,12 @@ func CheckFilesAndDirs() {
 	if err != nil {
 		gologger.Error().Msgf("Error during globbing history files: %v\n", err)
 	} else if len(matches) > 0 {
+		report.MarkTask("Task 16 - Passwords & Keys - History Files", true)
 		for _, file := range matches {
 			gologger.Print().Label(utils.Res.String()).Msgf("history file exists: %s\n", file)
 		}
 	} else {
+		report.MarkTask("Task 16 - Passwords & Keys - History Files", false)
 		gologger.Print().Label(utils.Sad.String()).Msg("no history file found in home directory")
 	}
 
@@ -45,4 +48,6 @@ func CheckFilesAndDirs() {
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg(".ssh directory NOT found in /")
 	}
+	report.MarkTaskStatus("Task 17 - Passwords & Keys - Config Files", report.Manual)
+	report.MarkTaskStatus("Task 18 - Passwords & Keys - SSH Keys", report.Manual)
 }

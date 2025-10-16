@@ -1,6 +1,7 @@
 package coreLinux
 
 import (
+	"XCalate/engine/report"
 	"XCalate/engine/utils"
 	"fmt"
 
@@ -18,8 +19,10 @@ func CheckPasswdWritable() {
 	}
 	if passwdWritable {
 		gologger.Print().Label(utils.Res.String()).Msg("Passwd file is world-writable")
+		report.MarkTask("Task 5 - Weak File Permissions - Writable /etc/passwd", true)
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("Passwd file is not world-writable")
+		report.MarkTask("Task 5 - Weak File Permissions - Writable /etc/passwd", false)
 	}
 	fmt.Println()
 	gologger.Print().Label(utils.Bsh.String()).Msg("Check out this command to verify! `ls -lat /etc/passwd`")

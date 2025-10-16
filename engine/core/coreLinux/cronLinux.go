@@ -1,6 +1,7 @@
 package coreLinux
 
 import (
+	"XCalate/engine/report"
 	"XCalate/engine/utils"
 	"fmt"
 	"os"
@@ -37,8 +38,10 @@ func CheckCronJobDetails() {
 	}
 	if strings.Contains(pathLine, currentUser.HomeDir) {
 		gologger.Print().Label(utils.Res.String()).Msg("PATH in /etc/crontab has home user directory")
+		report.MarkTask("Task 9 - Cron Jobs - PATH Environment Variable", true)
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("PATH in /etc/crontab does not have home user directory")
+		report.MarkTask("Task 9 - Cron Jobs - PATH Environment Variable", false)
 	}
 	fmt.Println()
 	gologger.Info().Msg("Checking cronjobs being run with a wildcard (*) ↓")
@@ -134,9 +137,11 @@ func CheckCronJobDetails() {
 			}
 
 			if strings.Contains(string(data), "*") {
+				report.MarkTask("Task 10 - Cron Jobs - Wildcards", true)
 				gologger.Print().Label(utils.Res.String()).Msgf("Possible cron jobs wildcard in %s", scriptPath)
 			} else {
 				gologger.Print().Label(utils.Sad.String()).Msgf("No wildcard found in script %s", scriptPath)
+				report.MarkTask("Task 10 - Cron Jobs - Wildcards", false)
 			}
 			fmt.Println()
 		}

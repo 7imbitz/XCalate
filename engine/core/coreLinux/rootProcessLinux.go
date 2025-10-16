@@ -1,6 +1,7 @@
 package coreLinux
 
 import (
+	"XCalate/engine/report"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -11,6 +12,7 @@ import (
 // CheckRootProcesses lists unique user-space processes running as root (ignores kernel threads)
 func CheckRootProcesses() {
 	fmt.Println()
+	report.MarkTaskStatus("Task 2 - Service Exploits", report.Manual)
 	cmd := "ps aux | awk '{print $1,$2,$9,$10,$11}'"
 	procsOutput, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {

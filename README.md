@@ -64,12 +64,8 @@ In the meantime it checks for
             - `ls -l /usr/bin/pkexec`
             - `stat -c "%A %U %G %n" /usr/bin/pkexec`
             - cross-check OS
-- Window
-    - To be continued...
-
 
 # 📖 Reference
 
 - https://tryhackme.com/r/room/linuxprivesc
     - https://tryhackme.com/7imbitz/badges/linux-privesc     
-- https://tryhackme.com/r/room/windows10privesc

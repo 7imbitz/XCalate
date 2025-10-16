@@ -1,6 +1,7 @@
 package coreLinux
 
 import (
+	"XCalate/engine/report"
 	"XCalate/engine/utils"
 	"fmt"
 
@@ -16,8 +17,10 @@ func CheckShadowPermissions() {
 		gologger.Error().Msgf("Error checking world readability: %s", errReadable)
 	} else if readable {
 		gologger.Print().Label(utils.Res.String()).Msg("Shadow file is world-readable")
+		report.MarkTask("Task 3 - Weak File Permissions - Readable /etc/shadow", true)
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("Shadow file is not world-readable")
+		report.MarkTask("Task 3 - Weak File Permissions - Readable /etc/shadow", false)
 	}
 	fmt.Println()
 
@@ -28,8 +31,10 @@ func CheckShadowPermissions() {
 		gologger.Error().Msgf("Error checking world writability: %s", errWritable)
 	} else if writable {
 		gologger.Print().Label(utils.Res.String()).Msg("Shadow file is world-writable")
+		report.MarkTask("Task 4 - Weak File Permissions - Writable /etc/shadow", true)
 	} else {
 		gologger.Print().Label(utils.Sad.String()).Msg("Shadow file is not world-writable")
+		report.MarkTask("Task 4 - Weak File Permissions - Writable /etc/shadow", false)
 	}
 	fmt.Println()
 

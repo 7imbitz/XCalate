@@ -1,6 +1,7 @@
 package coreLinux
 
 import (
+	"XCalate/engine/report"
 	"XCalate/engine/utils"
 	"bytes"
 	"fmt"
@@ -13,6 +14,7 @@ import (
 )
 
 func CheckKernel() {
+	report.MarkTaskStatus("Task 20 - Kernel Exploits", report.Manual)
 	// CVE-2022-0847
 	checkCve220847()
 	// CVE-2021-3493
